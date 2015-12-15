@@ -1,7 +1,7 @@
 
-import AppComponent from './components/App';
-import IndexComponent from './components/Index';
-import AboutComponent from './components/About';
+import AppComponent from '../components/App';
+import IndexComponent from '../components/Index';
+import AboutComponent from '../components/About';
 
 
 const routes = {
@@ -18,6 +18,6 @@ const routes = {
             component: AboutComponent
         }
     ]
-}
+};
 
-export {routes};
+export default routes;

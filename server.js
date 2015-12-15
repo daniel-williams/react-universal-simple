@@ -3,16 +3,13 @@ import http from 'http';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {match, RoutingContext} from 'react-router';
-import {routes} from './routes';
+import routes from './src/routes';
 
 const app = express();
 
-app.use(express.static('public'));
-
-app.set('view engine', 'ejs');
+app.use(express.static('dist'));
 
 app.get('*', (req, res) => {
-    // res.render('index');
 
     match({routes, location: req.url}, (err, redirectLocation, props) => {
         if(err) {
@@ -21,13 +18,26 @@ app.get('*', (req, res) => {
         } else if(redirectLocation) {
             // we matched a react router redirect
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-        } else if (props) {
-            // we matched a react component
-            const markup = renderToString(<RoutingContext {...props} />);
-            res.render('index', {markup});
-        } else {
+        } else if (!props) {
             // not found
             res.sendStatus(404);
+        } else {
+            // we matched a react component
+            const componentMarkup = renderToString(<RoutingContext {...props} />);
+            const HTML = `
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Universal/Isomorphic React</title>
+    </head>
+    <body>
+        <div id="app">${componentMarkup}</div>
+        <script type="application/javascript" src="bundle.js"></script>
+    </body>
+</html>
+`
+            res.end(HTML);
         }
     });
 });

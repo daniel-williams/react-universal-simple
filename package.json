@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.3.4",
     "express": "^4.13.3",
     "history": "^1.16.0",
     "react": "^0.14.3",
